@@ -291,19 +291,28 @@ posterSchema.statics.findBy = async ({ req, nPerPage, pageNumber, maxDistance })
   validation.checkFindReq(req);
 
   const searchObject = {
-    location:
-      {
-        $near:
-          {
-            $geometry: { type: 'Point', coordinates: [req.latitude, req.longitude] },
-            $minDistance: 0,
-            $maxDistance: maxDistance,
-          },
-      },
     type: req.type,
-    price: { $gte: req.priceFrom || 0, $lte: req.priceTo || 100000000000000 },
-    area: { $gte: req.areaFrom || 0, $lte: req.areaTo || 100000000000000 },
+    typePoster: req.typePoster,
   };
+
+  if (req.priceFrom || req.priceTo) {
+    searchObject.price = { $gte: req.priceFrom || 0, $lte: req.priceTo || 100000000000000 };
+  }
+
+  if (req.areaFrom || req.areaTo) {
+    searchObject.area = { $gte: req.areaFrom || 0, $lte: req.areaTo || 100000000000000 };
+  }
+
+  if (req.latitude && req.longitude) {
+    searchObject.location = {
+      $near:
+        {
+          $geometry: { type: 'Point', coordinates: [req.latitude, req.longitude] },
+          $minDistance: 0,
+          $maxDistance: maxDistance,
+        },
+    }
+  }
 
   if (req.typePoster) {
     searchObject.typePoster = req.typePoster;
@@ -325,31 +334,31 @@ posterSchema.statics.findBy = async ({ req, nPerPage, pageNumber, maxDistance })
     searchObject.state = { $in: req.state };
   }
 
-  if (req.countRoomsFrom && req.countRoomsTo) {
+  if (req.countRoomsFrom || req.countRoomsTo) {
     searchObject.countRooms = { $gte: req.countRoomsFrom || 0, $lte: req.countRoomsTo || 100000000000000 };
   }
 
-  if (req.countFloorsFrom && req.countFloorsTo) {
+  if (req.countFloorsFrom || req.countFloorsTo) {
     searchObject.countFloors = { $gte: req.countFloorsFrom || 0, $lte: req.countFloorsTo || 100000000000000 };
   }
 
-  if (req.kitchenAreaFrom && req.kitchenAreaTo) {
+  if (req.kitchenAreaFrom || req.kitchenAreaTo) {
     searchObject.kitchenArea = { $gte: req.kitchenAreaFrom || 0, $lte: req.kitchenAreaTo || 100000000000000 };
   }
 
-  if (req.livingAreaFrom && req.livingAreaTo) {
+  if (req.livingAreaFrom || req.livingAreaTo) {
     searchObject.livingArea = { $gte: req.livingAreaFrom || 0, $lte: req.livingAreaTo || 100000000000000 };
   }
 
-  if (req.landAreaFrom && req.landAreaTo) {
+  if (req.landAreaFrom || req.landAreaTo) {
     searchObject.landArea = { $gte: req.landAreaFrom || 0, $lte: req.landAreaTo || 100000000000000 };
   }
 
-  if (req.countSeatsShedFrom && req.countSeatsShedTo) {
+  if (req.countSeatsShedFrom || req.countSeatsShedTo) {
     searchObject.countSeatsShed = { $gte: req.countSeatsShedFrom || 0, $lte: req.countSeatsShedTo || 100000000000000 };
   }
 
-  if (req.yearOfConstructionFrom && req.yearOfConstructionTo) {
+  if (req.yearOfConstructionFrom || req.yearOfConstructionTo) {
     searchObject.yearOfConstruction = { $gte: req.yearOfConstructionFrom || 0, $lte: req.yearOfConstructionTo || 100000000000000 };
   }
 
@@ -363,19 +372,28 @@ posterSchema.statics.countBy = async ({ req, maxDistance }) => {
   validation.checkFindReq(req);
 
   const searchObject = {
-    location:
-      {
-        $near:
-          {
-            $geometry: { type: 'Point', coordinates: [req.latitude, req.longitude] },
-            $minDistance: 0,
-            $maxDistance: maxDistance,
-          },
-      },
     type: req.type,
-    price: { $gte: req.priceFrom || 0, $lte: req.priceTo || 100000000000000 },
-    area: { $gte: req.areaFrom || 0, $lte: req.areaTo || 100000000000000 },
+    typePoster: req.typePoster,
   };
+
+  if (req.priceFrom || req.priceTo) {
+    searchObject.price = { $gte: req.priceFrom || 0, $lte: req.priceTo || 100000000000000 };
+  }
+
+  if (req.areaFrom || req.areaTo) {
+    searchObject.area = { $gte: req.areaFrom || 0, $lte: req.areaTo || 100000000000000 };
+  }
+
+  if (req.latitude && req.longitude) {
+    searchObject.location = {
+      $near:
+        {
+          $geometry: { type: 'Point', coordinates: [req.latitude, req.longitude] },
+          $minDistance: 0,
+          $maxDistance: maxDistance,
+        },
+    }
+  }
 
   if (req.typePoster) {
     searchObject.typePoster = req.typePoster;
@@ -397,31 +415,31 @@ posterSchema.statics.countBy = async ({ req, maxDistance }) => {
     searchObject.state = { $in: req.state };
   }
 
-  if (req.countRoomsFrom && req.countRoomsTo) {
+  if (req.countRoomsFrom || req.countRoomsTo) {
     searchObject.countRooms = { $gte: req.countRoomsFrom || 0, $lte: req.countRoomsTo || 100000000000000 };
   }
 
-  if (req.countFloorsFrom && req.countFloorsTo) {
+  if (req.countFloorsFrom || req.countFloorsTo) {
     searchObject.countFloors = { $gte: req.countFloorsFrom || 0, $lte: req.countFloorsTo || 100000000000000 };
   }
 
-  if (req.kitchenAreaFrom && req.kitchenAreaTo) {
+  if (req.kitchenAreaFrom || req.kitchenAreaTo) {
     searchObject.kitchenArea = { $gte: req.kitchenAreaFrom || 0, $lte: req.kitchenAreaTo || 100000000000000 };
   }
 
-  if (req.livingAreaFrom && req.livingAreaTo) {
+  if (req.livingAreaFrom || req.livingAreaTo) {
     searchObject.livingArea = { $gte: req.livingAreaFrom || 0, $lte: req.livingAreaTo || 100000000000000 };
   }
 
-  if (req.landAreaFrom && req.landAreaTo) {
+  if (req.landAreaFrom || req.landAreaTo) {
     searchObject.landArea = { $gte: req.landAreaFrom || 0, $lte: req.landAreaTo || 100000000000000 };
   }
 
-  if (req.countSeatsShedFrom && req.countSeatsShedTo) {
+  if (req.countSeatsShedFrom || req.countSeatsShedTo) {
     searchObject.countSeatsShed = { $gte: req.countSeatsShedFrom || 0, $lte: req.countSeatsShedTo || 100000000000000 };
   }
 
-  if (req.yearOfConstructionFrom && req.yearOfConstructionTo) {
+  if (req.yearOfConstructionFrom || req.yearOfConstructionTo) {
     searchObject.yearOfConstruction = { $gte: req.yearOfConstructionFrom || 0, $lte: req.yearOfConstructionTo || 100000000000000 };
   }
 
@@ -430,7 +448,7 @@ posterSchema.statics.countBy = async ({ req, maxDistance }) => {
   return number;
 };
 
-posterSchema.statics.findById = async (id) => {
+posterSchema.statics.findById = async ({ id }) => {
   const poster = await Poster.find({ _id: id });
 
   return poster;
@@ -470,16 +488,10 @@ posterSchema.statics.countByUserId = async ({ id }) => {
   return number;
 };
 
-posterSchema.statics.countByUserId = async ({ id }) => {
-  const number = await Poster.count({ owner: id });
+posterSchema.statics.countAllPosters = async () => {
+  const number = await Poster.count();
 
   return number;
-};
-
-posterSchema.statics.getPostersHome = async () => {
-  const posters = await Poster.aggregate([{ $sample: { size: 10 } }]);
-
-  return posters;
 };
 
 const Poster = mongoose.model('Poster', posterSchema);

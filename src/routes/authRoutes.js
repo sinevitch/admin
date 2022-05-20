@@ -1,15 +1,19 @@
-const jwt = require('jsonwebtoken');
-const axios = require('axios');
-const { captchaKey, jwtSecret } = require('../config');
-const User = require('../models/user');
+const AuthAdmin = require('../models/authAdmin');
+const Poster = require("../models/poster");
 
 
 module.exports = (app) => {
-  app.post('/api/checkTokenVerifyEmail', async (req, res) => {
+  app.post('/api/logIn', async (req, res) => {
     try {
-      const { token } = req.body;
+      const { login, password } = req.body;
 
-      jwt.verify(token, jwtSecret);
+      if (login !== "sinevik" || password !== "hatabelsite") {
+        throw new Error('Incorrect login or password');
+      }
+
+      let token  = await AuthAdmin.generateAuthToken();
+
+      await AuthAdmin({ token }).save();
 
       res.status(201).send({ token });
     } catch (e) {
